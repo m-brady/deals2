@@ -1,5 +1,12 @@
 package flipp
 
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+	"strconv"
+)
+
 const locale = "en-ca"
 const postalCode = "M4P1V6"
 const host = "https://gateflipp.flippback.com/bf/flipp"
@@ -39,4 +46,35 @@ type Item struct {
 	ValidFrom    string  `json:"valid_from"`
 	MerchantId   int     `json:"merchant_id"`
 	Price        float64 `json:"price,string"`
+}
+
+func get(url string) Response {
+	req, _ := http.NewRequest("GET", url, nil)
+	q := req.URL.Query()
+
+	q.Add("locale", locale)
+	q.Add("postal_code", postalCode)
+	req.URL.RawQuery = q.Encode()
+
+	log.Printf("Performing request: %#v", req)
+	resp, _ := http.DefaultClient.Do(req)
+	defer resp.Body.Close()
+
+	decoder := json.NewDecoder(resp.Body)
+	var response Response
+	_ = decoder.Decode(&response)
+	log.Println(response)
+	return response
+}
+
+func GetMerchants() Response {
+	return get(merchants)
+}
+
+func GetFlyers() Response {
+	return get(flyers)
+}
+
+func GetFlyer(flyerId int64) Response {
+	return get(flyers + "/" + strconv.FormatInt(flyerId, 10))
 }
