@@ -1,5 +1,11 @@
 package flipp
 
+const locale = "en-ca"
+const postalCode = "M4P1V6"
+const host = "https://gateflipp.flippback.com/bf/flipp"
+const merchants = host + "/merchants"
+const flyers = host + "/flyers"
+
 type Flyer struct {
 	Id            int    `json:"id"`
 	MerchantId    int    `json:"merchant_id"`
@@ -34,5 +40,3 @@ type Item struct {
 	MerchantId   int     `json:"merchant_id"`
 	Price        float64 `json:"price,string"`
 }
-
-type
