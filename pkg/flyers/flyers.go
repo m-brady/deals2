@@ -5,9 +5,11 @@ import (
 )
 
 type FlyerService interface {
-	Flyer(id int) (*Flyer, error)
-	CreateFlyer(f *Flyer) error
-	Flyers() ([]*Flyer, error)
+	Flyer(id int) (*flipp.Flyer, error)
+	Flyers() ([]*flipp.Flyer, error)
+	Merchants() ([]*flipp.Merchant, error)
 
-	Merchants() ([]*Merchant, error)
+	AddFlyerItem(item *flipp.Item) error
+	AddMerchant(merchant *flipp.Merchant) error
+	AddFlyer(flyer *flipp.Flyer) error
 }
