@@ -3,16 +3,11 @@ package firestore
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"fmt"
 	"github.com/m-brady/deals/pkg/flipp"
 	"google.golang.org/api/iterator"
 	"log"
 	"strconv"
 )
-
-func Test() {
-	fmt.Println("fsdfs")
-}
 
 type FlyerService struct {
 	client *firestore.Client
@@ -24,16 +19,13 @@ func (fs FlyerService) Flyer(id int) (*flipp.Flyer, error) {
 	if err != nil {
 		return nil, err
 	}
-	data := doc.Data()
-	return &flipp.Flyer{
-		Id:            data["id"].(int),
-		MerchantId:    data["merchant_id"].(int),
-		ValidTo:       data["valid_to"].(string),
-		ValidFrom:     data["valid_from"].(string),
-		AvailableTo:   data["available_to"].(string),
-		AvailableFrom: data["available_from"].(string),
-	}, nil
+	var flyer flipp.Flyer
 
+	err = doc.DataTo(&flyer)
+	if err != nil {
+		return nil, err
+	}
+	return &flyer, nil
 }
 func (fs FlyerService) Flyers() ([]*flipp.Flyer, error) {
 
@@ -50,16 +42,9 @@ func (fs FlyerService) Flyers() ([]*flipp.Flyer, error) {
 		if err != nil {
 			log.Panic(err)
 		}
-		data := doc.Data()
-		f := &flipp.Flyer{
-			Id:            data["id"].(int),
-			MerchantId:    data["merchant_id"].(int),
-			ValidTo:       data["valid_to"].(string),
-			ValidFrom:     data["valid_from"].(string),
-			AvailableTo:   data["available_to"].(string),
-			AvailableFrom: data["available_from"].(string),
-		}
-		flyers = append(flyers, f)
+		var flyer flipp.Flyer
+		err = doc.DataTo(&flyer)
+		flyers = append(flyers, &flyer)
 	}
 	return flyers, nil
 }
@@ -77,14 +62,9 @@ func (fs FlyerService) Merchants() ([]*flipp.Merchant, error) {
 		if err != nil {
 			log.Panic(err)
 		}
-		data := doc.Data()
-		m := &flipp.Merchant{
-			Id:             data["id"].(int),
-			Name:           data["named"].(string),
-			UsBased:        data["us_based"].(bool),
-			NameIdentifier: data["name_identifier"].(string),
-		}
-		merchants = append(merchants, m)
+		var merchant flipp.Merchant
+		err = doc.DataTo(&merchant)
+		merchants = append(merchants, &merchant)
 	}
 	return merchants, nil
 }
@@ -95,10 +75,10 @@ func (fs FlyerService) AddFlyerItem(item *flipp.Item) error {
 
 }
 func (fs FlyerService) AddMerchant(merchant *flipp.Merchant) error {
-	_, err := fs.client.Collection("item").Doc(strconv.Itoa(merchant.Id)).Create(context.Background(), merchant)
+	_, err := fs.client.Collection("merchant").Doc(strconv.Itoa(merchant.Id)).Create(context.Background(), merchant)
 	return err
 }
 func (fs FlyerService) AddFlyer(flyer *flipp.Flyer) error {
-	_, err := fs.client.Collection("item").Doc(strconv.Itoa(flyer.Id)).Create(context.Background(), flyer)
+	_, err := fs.client.Collection("flyer").Doc(strconv.Itoa(flyer.Id)).Create(context.Background(), flyer)
 	return err
 }

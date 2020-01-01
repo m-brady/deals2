@@ -50,14 +50,6 @@ const host = "https://gateflipp.flippback.com/bf/flipp"
 const merchants = host + "/merchants"
 const flyers = host + "/flyers"
 
-func main() {
-	//makeRequest("loblaws")
-	//mb()
-	//loadMerchants()
-	//loadFlyers()
-	loadFlyerItems(3184499)
-}
-
 func makeRequest(query string) Response {
 	req, _ := http.NewRequest("GET", host, nil)
 	q := req.URL.Query()
@@ -220,8 +212,3 @@ func loadFlyerItems(flyerId int64) {
 	response := getFlyer(flyerId)
 	insertFlyerItems(response.Items)
 }
-
-
-
-
-
