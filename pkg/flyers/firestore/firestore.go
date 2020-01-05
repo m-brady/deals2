@@ -10,11 +10,11 @@ import (
 )
 
 type FlyerService struct {
-	client *firestore.Client
+	Client *firestore.Client
 }
 
 func (fs FlyerService) Flyer(id int) (*flipp.Flyer, error) {
-	doc, err := fs.client.Collection("flyers").Doc(strconv.Itoa(id)).Get(context.Background())
+	doc, err := fs.Client.Collection("flyers").Doc(strconv.Itoa(id)).Get(context.Background())
 
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (fs FlyerService) Flyers() ([]*flipp.Flyer, error) {
 
 	var flyers []*flipp.Flyer
 
-	iter := fs.client.Collection("flyers").Documents(context.Background())
+	iter := fs.Client.Collection("flyers").Documents(context.Background())
 
 	defer iter.Stop()
 	for {
@@ -51,7 +51,7 @@ func (fs FlyerService) Flyers() ([]*flipp.Flyer, error) {
 func (fs FlyerService) Merchants() ([]*flipp.Merchant, error) {
 	var merchants []*flipp.Merchant
 
-	iter := fs.client.Collection("merchants").Documents(context.Background())
+	iter := fs.Client.Collection("merchants").Documents(context.Background())
 
 	defer iter.Stop()
 	for {
@@ -70,15 +70,15 @@ func (fs FlyerService) Merchants() ([]*flipp.Merchant, error) {
 }
 
 func (fs FlyerService) AddFlyerItem(item *flipp.Item) error {
-	_, err := fs.client.Collection("item").Doc(strconv.FormatInt(item.Id, 64)).Create(context.Background(), item)
+	_, err := fs.Client.Collection("item").Doc(strconv.FormatInt(item.Id, 64)).Create(context.Background(), item)
 	return err
 
 }
 func (fs FlyerService) AddMerchant(merchant *flipp.Merchant) error {
-	_, err := fs.client.Collection("merchant").Doc(strconv.Itoa(merchant.Id)).Create(context.Background(), merchant)
+	_, err := fs.Client.Collection("merchant").Doc(strconv.Itoa(merchant.Id)).Create(context.Background(), merchant)
 	return err
 }
 func (fs FlyerService) AddFlyer(flyer *flipp.Flyer) error {
-	_, err := fs.client.Collection("flyer").Doc(strconv.Itoa(flyer.Id)).Create(context.Background(), flyer)
+	_, err := fs.Client.Collection("flyer").Doc(strconv.Itoa(flyer.Id)).Create(context.Background(), flyer)
 	return err
 }
