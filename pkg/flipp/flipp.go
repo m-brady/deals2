@@ -14,7 +14,7 @@ const merchants = host + "/merchants"
 const flyers = host + "/flyers"
 
 type Flyer struct {
-	Id            int64  `json:"id"`
+	Id            int    `json:"id"`
 	MerchantId    int    `json:"merchant_id"`
 	ValidTo       string `json:"valid_to"`
 	ValidFrom     string `json:"valid_from"`
