@@ -14,7 +14,7 @@ const merchants = host + "/merchants"
 const flyers = host + "/flyers"
 
 type Flyer struct {
-	Id            int    `json:"id"`
+	Id            int64  `json:"id"`
 	MerchantId    int    `json:"merchant_id"`
 	ValidTo       string `json:"valid_to"`
 	ValidFrom     string `json:"valid_from"`
@@ -75,6 +75,6 @@ func GetFlyers() Response {
 	return get(flyers)
 }
 
-func GetFlyer(flyerId int64) Response {
-	return get(flyers + "/" + strconv.FormatInt(flyerId, 10))
+func GetFlyer(flyerId int) Response {
+	return get(flyers + "/" + strconv.Itoa(flyerId))
 }

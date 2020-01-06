@@ -16,7 +16,7 @@ func TestAbcd(t *testing.T) {
 	}
 
 	fs := FlyerService{
-		client: client,
+		Client: client,
 	}
 
 	_ = fs.AddFlyer(&flipp.Flyer{
